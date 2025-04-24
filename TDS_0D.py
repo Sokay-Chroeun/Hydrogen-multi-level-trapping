@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 
+# My first comment
+
 E_constant = False
 TDS = True
 E = 1.3
