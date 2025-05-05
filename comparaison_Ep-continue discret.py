@@ -3,10 +3,34 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 
 E_constant = False
-TDS = True
+TDS = False
 Lam = 30
 
 def MacNabb(C, t):
+    T, cL, CT = C
+    LatticeP = 3.16E-7 * 3.16E-7
+    NT = 6*3.62e-3
+    NL = 6.32e19
+    xev = 1.602176634e-19*6.022e23
+    thetaT = CT/NT
+    p0 = 5/6
+    #phi =  1/(1+np.exp(-Lam*(thetaT-p0)))
+    phi = 1
+    xEpi = -0.45*thetaT**2 - 0.0476*thetaT + 1.374
+    xEpi = xEpi + 0.2
+    k = (1.38e-1/LatticeP)*np.exp(-0.2*xev/(8.31*T))
+    p = 1e13*np.exp(-xEpi*xev/(8.31*T))
+    if E_constant :
+        p = 1e13*np.exp(-1.51*xev/(8.31*T))
+    #dCTdt = k/NL*cL/6*(NT - (6*CT - 5*NT)*phi) - p*CT
+    dCTdt = k/NL*cL/6*(NT - CT*phi) - p*CT
+    dCLdt = 0.
+    dTdt = 0.
+    if TDS:
+        dTdt = 1e-2
+    return [dTdt, dCLdt, dCTdt]
+
+def MacNabb2(C, t):
     T, cL, CT = C
     LatticeP = 3.16E-7 * 3.16E-7
     NT = 6*3.62e-3
@@ -64,15 +88,21 @@ def Hodille(C, t):
     return [dTdt, dCLdt, dN0dt, dN1dt, dN2dt, dN3dt, dN4dt, dN5dt, dN6dt, dCt]
 
 # solve ode python MacNabb-------------------
-CL0 = 5.8e9
-CT0 = 0.
-T0 = 200.
+CL0 = 6e9
+CT0 = 0
+T0 = 300.
 C_0 = [T0, CL0, CT0]
-time = np.linspace(0, 60000, 800)
+time = np.linspace(0, 500, 800)
 sol = odeint(MacNabb, C_0, t=time)
 T_sol = sol.T[0]
 CL_macNabb = sol.T[1]
 CT_macNabb = sol.T[2]
+
+sol2 = odeint(MacNabb2, C_0, t=time)
+T_sol2 = sol2.T[0]
+CL_macNabb2 = sol2.T[1]
+CT_macNabb2 = sol2.T[2]
+
 
 
 # solve ode python Hodille -------------------
@@ -93,6 +123,7 @@ CT_Hodille = N1_Hodille + N2_Hodille*2 + N3_Hodille*3 + N4_Hodille*4 + N5_Hodill
 NT = 6*3.62e-3
 thetaT_H = CT_Hodille/NT
 thetaT = CT_macNabb/NT
+thetaT2 = CT_macNabb/NT
 
 # visualisation ------------------------
 plt.figure(1)
@@ -104,11 +135,15 @@ plt.plot(T_sol,N3_Hodille*3, label = 'CT3')
 plt.plot(T_sol,N4_Hodille*4, label = 'CT4')
 plt.plot(T_sol,N5_Hodille*5, label = 'CT5')
 plt.plot(T_sol,N6_Hodille*6, label = 'CT6')
-plt.plot(T_sol,Ct_Hodille, label = 'CT : E discontinued')
-plt.plot(T_sol,CT_macNabb, label = 'CT : E continued', linestyle = '--')
-plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.35), ncol = 4)
+plt.plot(T_sol,Ct_Hodille, label = 'CT : E discrete',color='k')
+plt.plot(T_sol,CT_macNabb, label = 'CT : E continuous',color='k', linestyle = '--')
+plt.plot(T_sol,CT_macNabb2, label = 'CT : E continuous (modified)', color='k', linestyle = '-.')
+plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.35), ncol = 5)
+
 plt.xlabel('Temperature [K]')
-plt.ylabel('Concentration [at.fr]')
+if TDS == False:
+    plt.xlabel('Time [s]')
+plt.ylabel('$\\theta_T$')
 plt.grid()
 plt.savefig("ECont_vs_EDiscont.png",bbox_inches='tight')
 
@@ -133,6 +168,20 @@ plt.legend()
 plt.xlabel('Time [s]')
 plt.ylabel('$\\Delta C_T$')
 plt.grid()
+
+
+plt.figure(4)
+theta4 = np.linspace(0, 1, 100)
+phi4 = 1/(1+np.exp(-Lam*(theta4 -p0)))
+plt.plot(theta4 ,phi4, label = 'with $\\lambda$=30')
+plt.legend()
+plt.xlabel('$\\theta_T$')
+plt.ylabel('$\\varphi$')
+plt.grid()
+
+
+
+
 
 
 
