@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-data = pd.read_excel('Retention_PFMC.xlsx')
+#data = pd.read_excel('Retention_PFMC.xlsx')
 
 t = np.linspace(0,1.56e5,500)
 Ret1 = 1e15*t**0.558
