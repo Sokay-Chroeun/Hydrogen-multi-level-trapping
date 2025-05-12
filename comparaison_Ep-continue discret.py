@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 
 E_constant = False
-TDS = False
+TDS = True
 Lam = 30
 
 def MacNabb(C, t):
@@ -92,7 +92,7 @@ CL0 = 6e9
 CT0 = 0
 T0 = 300.
 C_0 = [T0, CL0, CT0]
-time = np.linspace(0, 500, 800)
+time = np.linspace(0, 50000, 800)
 sol = odeint(MacNabb, C_0, t=time)
 T_sol = sol.T[0]
 CL_macNabb = sol.T[1]
@@ -135,17 +135,17 @@ plt.plot(T_sol,N3_Hodille*3, label = 'CT3')
 plt.plot(T_sol,N4_Hodille*4, label = 'CT4')
 plt.plot(T_sol,N5_Hodille*5, label = 'CT5')
 plt.plot(T_sol,N6_Hodille*6, label = 'CT6')
-plt.plot(T_sol,Ct_Hodille, label = 'CT : E discrete',color='k')
-plt.plot(T_sol,CT_macNabb, label = 'CT : E continuous',color='k', linestyle = '--')
-plt.plot(T_sol,CT_macNabb2, label = 'CT : E continuous (modified)', color='k', linestyle = '-.')
+plt.plot(T_sol,Ct_Hodille, label = 'CT : Sequential',color='k')
+plt.plot(T_sol,CT_macNabb, label = 'CT : Simultaneous',color='k', linestyle = '--')
+plt.plot(T_sol,CT_macNabb2, label = 'CT : Simultaneous (with $\\varphi$)', color='k', linestyle = '-.')
 plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.35), ncol = 5)
 
 plt.xlabel('Temperature [K]')
 if TDS == False:
     plt.xlabel('Time [s]')
-plt.ylabel('$\\theta_T$')
+plt.ylabel('$\\theta_{V_1}$')
 plt.grid()
-plt.savefig("ECont_vs_EDiscont.png",bbox_inches='tight')
+plt.savefig("ECont_vs_EDiscont.png",bbox_inches='tight',dpi=500)
 
 plt.figure(2)
 plt.plot(time,thetaT_H, label = 'E discontinued')
@@ -154,6 +154,8 @@ plt.legend()
 plt.xlabel('Time [s]')
 plt.ylabel('$\\theta_T$ [.]')
 plt.grid()
+
+
 
 p0 = 5/6
 phi = 1/(1+np.exp(-Lam*(thetaT-p0)))
@@ -175,10 +177,10 @@ theta4 = np.linspace(0, 1, 100)
 phi4 = 1/(1+np.exp(-Lam*(theta4 -p0)))
 plt.plot(theta4 ,phi4, label = 'with $\\lambda$=30')
 plt.legend()
-plt.xlabel('$\\theta_T$')
+plt.xlabel('$\\theta_{V_1}$')
 plt.ylabel('$\\varphi$')
 plt.grid()
-
+plt.savefig("lambda.png",bbox_inches='tight',dpi=500)
 
 
 

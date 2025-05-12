@@ -12,8 +12,8 @@ xEpi = -0.0179*x**2 + 0.0381*x + 1.284     # parabolique
 
 plt.figure(2,dpi=100)
 
-plt.scatter(theta, Epi, label='[Hodille 2016]', marker='D')
-plt.plot(x, xEpi, label='This current work', color = 'r')
+plt.scatter(theta, Epi, label='Discrete energies [3]', marker='D')
+plt.plot(x, xEpi, label='Continuous energy', color = 'r')
 
 plt.legend(ncol=1)
 # plt.grid()
@@ -22,4 +22,4 @@ plt.ylabel('Detrapping energy [eV]',fontsize=12)
 plt.yticks(fontsize=12)
 plt.xticks(fontsize=12)
 plt.ylim([0.4,1.7])
-plt.savefig("Ep_TDS-0D.png",bbox_inches='tight')
+plt.savefig("Ep_TDS-0D.png",bbox_inches='tight',dpi=500)

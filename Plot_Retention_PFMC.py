@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import pandas as pd
+#import pandas as pd
 import numpy as np
 
 
@@ -10,8 +10,8 @@ Ret1 = 1e15*t**0.558
 Ret2 = 1e15*t**0.582
 
 plt.figure(1,dpi=100)
-plt.plot(t, Ret1, label='Ep($\\theta_{Ti}$)')
-plt.plot(t, Ret2, label='Ep($\\theta_{T1}$)')
+plt.plot(t, Ret1, label='Ep($\\theta_{V_i}$)')
+plt.plot(t, Ret2, label='Constant Ep')
 # plt.plot(data.t, data.QH, label='Ep($\\theta_{Ti}$')
 # plt.plot(data.t2, data.QH2, label='Ep($\\theta_{T1}$')
 
@@ -26,4 +26,4 @@ plt.xlim([0,1.6e5])
 #plt.yscale('log')
 plt.yticks(fontsize=12)
 plt.xticks(fontsize=12)
-plt.savefig("Retention_PFMC.png",bbox_inches='tight')
+plt.savefig("Retention_PFMC.png",bbox_inches='tight',dpi=500)

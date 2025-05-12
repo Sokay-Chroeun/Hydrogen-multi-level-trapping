@@ -19,9 +19,9 @@ for i in range(len(y2)):
     Y2.append(y2[i]*6.32e25) # Convertion de l'unité de flux 
 
 plt.figure(1, figsize=(7,4))
-plt.scatter(x3,y3, marker = '+',label = 'Experiment [Quastel 2006]', color = 'black',s=50)
-plt.plot(x1,y1, label = 'Simulation [Hodille 2016]', linestyle='--')
-plt.plot(x2,Y2, label='This current work',color='Tab:red')
+plt.scatter(x3,y3, marker = '+',label = 'Experiment [6]', color = 'black',s=50)
+plt.plot(x1,y1, label = 'Sequential kinetics [3]', linestyle='--')
+plt.plot(x2,Y2, label='Simultaneous kinetics',color='Tab:red')
 #plt.ylim([-0.1e19, 1.75e19])
 plt.yticks(fontsize=12)
 plt.xticks(fontsize=12)
@@ -29,4 +29,4 @@ plt.xlabel('Temperature [K]',fontsize=12)
 plt.ylabel('Desorption rate [D/m$^2$.s]',fontsize=12)
 plt.legend(loc='upper left')
 # plt.grid()
-plt.savefig("Hodille_TDS.png",bbox_inches='tight')
+plt.savefig("Hodille_TDS.png",bbox_inches='tight',dpi=500)
